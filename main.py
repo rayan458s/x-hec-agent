@@ -6,6 +6,10 @@ from fastapi import FastAPI
 app = FastAPI()
 
 
+def my_agent(message: str) -> str:
+    return "Hello, " + message + "!"
+
+
 # Message model
 class Message(BaseModel):
     message: str
@@ -18,4 +22,6 @@ def read_root():
 
 @app.post("/message")
 def send_message(request: Message):
-    return {"message": request.message}
+    response = my_agent(request.message)
+
+    return {"message": response}
