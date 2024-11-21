@@ -12,3 +12,9 @@ Install requirements.txt
 ```bash
 pip install -r requirements.txt
 ```
+
+## Run
+
+```bash
+fastapi dev main.py
+```
