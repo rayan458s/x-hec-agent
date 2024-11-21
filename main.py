@@ -22,6 +22,7 @@ def read_root():
 
 @app.post("/message")
 def send_message(request: Message):
+    # Call OpenAI
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=[
@@ -32,7 +33,7 @@ def send_message(request: Message):
             {"role": "user", "content": request.message},
         ],
     )
-
+    # Extract the message from the completion
     answer = completion.choices[0].message.content
 
     return {"answer": answer}
