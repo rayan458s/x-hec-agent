@@ -13,6 +13,12 @@ Install requirements.txt
 pip install -r requirements.txt
 ```
 
+Create a .env file with the following content:
+
+```bash
+OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+```
+
 ## Run
 
 ```bash
