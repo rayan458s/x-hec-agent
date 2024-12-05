@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLB Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #chat-container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        #chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .user {
+            color: blue;
+        }
+        .system {
+            color: green;
+        }
+        #message-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        #send-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #send-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-messages"></div>
+        <input type="text" id="message-input" placeholder="Type your message here..." />
+        <button id="send-button">Send</button>
+    </div>
+    <script>
+        const apiUrl = "https://your-app-domain/message"; // Replace with your backend URL
+
+        document.getElementById("send-button").addEventListener("click", async () => {
+            const messageInput = document.getElementById("message-input");
+            const chatMessages = document.getElementById("chat-messages");
+
+            if (!messageInput.value.trim()) return;
+
+            // Append the user's message to the chat
+            const userMessage = document.createElement("div");
+            userMessage.className = "message user";
+            userMessage.textContent = "You: " + messageInput.value;
+            chatMessages.appendChild(userMessage);
+
+            try {
+                // Send the message to the backend
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ message: messageInput.value }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to send message");
+                }
+
+                const data = await response.json();
+
+                // Append the system's response to the chat
+                const systemMessage = document.createElement("div");
+                systemMessage.className = "message system";
+                systemMessage.textContent = "System: " + data.answer;
+                chatMessages.appendChild(systemMessage);
+            } catch (error) {
+                const errorMessage = document.createElement("div");
+                errorMessage.className = "message system";
+                errorMessage.textContent = "System: Error connecting to server.";
+                chatMessages.appendChild(errorMessage);
+            }
+
+            // Scroll to the bottom of the chat and clear the input
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            messageInput.value = "";
+        });
+    </script>
+</body>
+</html>
