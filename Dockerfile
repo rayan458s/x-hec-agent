@@ -8,4 +8,4 @@ COPY . .
 RUN pip install -r requirements.txt
 
 # Run the server on port 80
-CMD ["fastapi", "run", "main.py"]
+CMD ["python", "main.py"]
