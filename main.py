@@ -2,14 +2,9 @@ import os
 from pydantic import BaseModel
 from openai import OpenAI  # type: ignore
 from fastapi import FastAPI, Depends, HTTPException
-<<<<<<< HEAD
-from dotenv import load_dotenv
-import phospho
 import replicate
-=======
 from dotenv import load_dotenv  # type: ignore
 import phospho  # type: ignore
->>>>>>> 673ec7d26c5a891c3f38f74eb3b9ca67d3b7351b
 from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.responses import FileResponse
 
