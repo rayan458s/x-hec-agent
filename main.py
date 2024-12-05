@@ -1,10 +1,9 @@
 import os
-from typing import Union
 from pydantic import BaseModel
-from openai import OpenAI
+from openai import OpenAI  # type: ignore
 from fastapi import FastAPI, Depends, HTTPException
-from dotenv import load_dotenv
-import phospho
+from dotenv import load_dotenv  # type: ignore
+import phospho  # type: ignore
 from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
 
 load_dotenv()
@@ -25,7 +24,7 @@ phospho.init(
 bearer = HTTPBearer()
 
 
-def get_api_hey(authorization: HTTPAuthorizationCredentials = Depends(bearer)) -> str:
+def get_api_hey(authorization: HTTPAuthorizationCredentials = Depends(bearer)) -> None:
     # Parse credentials
     api_key_token = authorization.credentials
 
