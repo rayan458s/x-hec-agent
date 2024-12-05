@@ -5,7 +5,9 @@ from openai import OpenAI
 from fastapi import FastAPI, Depends, HTTPException
 from dotenv import load_dotenv
 import phospho
+import replicate
 from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.responses import FileResponse
 
 load_dotenv()
 
@@ -85,6 +87,37 @@ def send_message_secure(request: Message, api_key: str = Depends(get_api_hey)):
     answer = completion.choices[0].message.content
 
     return {"answer": answer}
+
+
+@app.post("/image")
+def send_image(request: Message):
+    prompt = request.message
+
+    # Call Replicate
+    output = replicate.run(
+        "black-forest-labs/flux-schnell",
+        input={
+            "prompt": prompt,
+            "go_fast": True,
+            "megapixels": "1",
+            "num_outputs": 1,
+            "aspect_ratio": "1:1",
+            "output_format": "webp",
+            "output_quality": 80,
+            "num_inference_steps": 4,
+        },
+    )
+
+    # Save the generated image
+    with open("generated_image.webp", "wb") as f:
+        f.write(output[0].read())
+
+    # Return the image file
+    return FileResponse(
+        path="generated_image.webp",
+        media_type="image/webp",
+        filename="generated_image.webp",
+    )
 
 
 if __name__ == "__main__":
