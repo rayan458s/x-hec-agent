@@ -85,3 +85,9 @@ def send_message_secure(request: Message, api_key: str = Depends(get_api_hey)):
     answer = completion.choices[0].message.content
 
     return {"answer": answer}
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)
