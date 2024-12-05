@@ -4,14 +4,22 @@ from pydantic import BaseModel
 from openai import OpenAI
 from fastapi import FastAPI, Depends, HTTPException
 from dotenv import load_dotenv
+import phospho
+from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
 
 load_dotenv()
 
 client = OpenAI()
 app = FastAPI()
 
-from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
 
+phospho.init(
+    api_key=os.getenv("PHOSPHO_API_KEY"), project_id="9c2b674fd8eb4db2a6b15309af2b0ade"
+)
+
+# input_str = "Hello! This is what the user asked to the system"
+# output_str = "This is the response showed to the user by the app."
+# phospho.log(input=input_str, output=output_str)
 
 ### (optional) Secure our API routes with an API key
 bearer = HTTPBearer()
@@ -53,6 +61,9 @@ def send_message(request: Message):
     )
     # Extract the message from the completion
     answer = completion.choices[0].message.content
+
+    # Log to analytics
+    phospho.log(input=request.message, output=answer)
 
     return {"answer": answer}
 
