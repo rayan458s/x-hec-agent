@@ -7,6 +7,9 @@ from dotenv import load_dotenv  # type: ignore
 import phospho  # type: ignore
 from fastapi.security.http import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 
 load_dotenv()
 
@@ -43,8 +46,9 @@ class Message(BaseModel):
 
 
 @app.get("/")
-def read_root():
-    return {"Hello": "PLB!"}
+def serve_frontend():
+    """Serve the frontend HTML file."""
+    return FileResponse("index.html")
 
 
 @app.post("/message")
